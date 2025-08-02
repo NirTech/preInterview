@@ -9,8 +9,9 @@ public class OpenMeteoForecastWrapperController {
     private OpenmeteoforecastService  openmeteoforecastService;
 
     @GetMapping("/weather")
-    public @ResponseBody Object getTemprature(@RequestParam double latitude, @RequestParam double longitude) {
-        return  openmeteoforecastService.getTemparature(latitude,longitude);
+    public @ResponseBody double getTemperature(@RequestParam double latitude,
+                                               @RequestParam double longitude) {
+        return openmeteoforecastService.getTemperature(latitude, longitude);
     }
 
 

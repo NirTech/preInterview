@@ -12,21 +12,30 @@ public class OpenmeteoforecastService {
 
     @Autowired
     RestTemplate restTemplate;
-    public Object getTemparature(double latitude, double longitude){
-        String URL = "https://api.open-meteo.com/v1/forecast?" +
+
+    /**
+     * Calls the Open Meteo forecast API and extracts the current temperature.
+     *
+     * @param latitude  latitude of the location
+     * @param longitude longitude of the location
+     * @return the current temperature in degrees Celsius
+     */
+    public double getTemperature(double latitude, double longitude) {
+        String url = "https://api.open-meteo.com/v1/forecast?" +
                 "latitude=" + latitude + "&longitude=" + longitude + "&current=temperature_2m";
-        //response from the open-meteo forcast API
-        ResponseEntity<String> response
-                = restTemplate.getForEntity(URL, String.class);
-        // ObjectMapper to get temprature from the response
+
+        // response from the open-meteo forecast API
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        // ObjectMapper to get temperature from the response
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = null;
+        JsonNode root;
         try {
             root = mapper.readTree(response.getBody());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         JsonNode current = root.path("current");
-        return current.path("temperature_2m");
+        return current.path("temperature_2m").asDouble();
     }
 }
